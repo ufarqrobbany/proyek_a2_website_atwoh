@@ -2179,17 +2179,49 @@ section {
 }
 
 /* // MANGA */
+.container-manga {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: start;
+  margin: 2em 0;
+  row-gap: 2em;
+  column-gap: 2%;
+}
+
+.search-custom {
+  background-color: var(--color-secondary);
+  border-radius: 0 0.3em 0.3em 0;
+  color: white;
+}
+
+
+.manga-card {
+  overflow: hidden;
+  width: 32%;
+}
+
+@media (max-width: 768px) {
+  .manga-card {
+    width: 100%;
+  }
+}
+
 .manga-card .card-body-custom {
   display: flex;
   flex-direction: row !important;
   align-items: start;
   column-gap: 1em;
   padding: 1em;
+  overflow-y: scroll;
 }
 
 .manga-card .card-body-custom img {
   width: 40%;
-  border-radius: 0.6em;
+  border-radius: 0.4em;
+  aspect-ratio: 45/64;
 }
 
 .manga-card .card-body-custom .card-text {
@@ -2197,23 +2229,67 @@ section {
 }
 
 .manga-card .card-body-custom .synopsis {
-  margin-bottom: 1em;
+  /* margin-bottom: 1em; */
+  font-size: 0.8em;
+  /* max-height: 3em; */
+  overflow: hidden;
+}
+
+.card-body-custom .card-text .label {
+  font-weight: 600;
+  flex-shrink: 0;
+  font-size: 0.8em;
+}
+
+.card-body-custom .card-text .value {
+  font-size: 0.8em;
+}
+
+.card-body-custom button {
+  font-size: 0.8em;
+  text-decoration: none;
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--color-primary);
 }
 
 .card-header-custom {
-  padding: 0.8em 1em;
-  background: ;
+  padding: 1em 2em;
   border-bottom: 1px solid #ced4da;
+  background-color: rgb(50 68 88);
+  color : #fff;
+}
+
+.card-header-custom .card-title a {
+  color: white;
+  transition: 0.2s;
+}
+
+.card-header-custom .card-title a:hover {
+  color: var(--color-primary);
 }
 
 .card-header-custom .card-genre {
-  font-size: 0.7em;
+  font-size: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.4em;
+  row-gap: 0.4em;
+  justify-content: center;
+}
+
+.label-category {
+  display: inline-block;
+  background-color: #47607c;
+  border-radius: 1em;
+  padding: 0.2em 1em;
 }
 
 .card-footer-custom {
-  padding: 0.6em 1.4em;
+  padding: 1em 2em;
   font-size: 0.7em;
   border-top: 1px solid #ced4da;
+  background-color: rgba(50, 68, 88, 0.05);
 }
 
 .card-footer-custom div {
@@ -2230,4 +2306,14 @@ section {
   font-size: 0.8em;
   font-weight: 400;
   margin-bottom: 0.1em;
+}
+
+.page-item .page-link {
+  color:  var(--color-secondary) !important;
+}
+
+.page-item.active .page-link {
+  background-color: var(--color-secondary) !important;
+  color: white !important;
+  border: 1px solid var(--color-secondary);
 }

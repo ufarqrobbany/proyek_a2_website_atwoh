@@ -1,6 +1,5 @@
 import scrapy
 
-
 class MangaScraper(scrapy.Spider):
     name = 'manga'
     start_urls = ["https://myanimelist.net/topmanga.php"]
@@ -23,12 +22,13 @@ class MangaScraper(scrapy.Spider):
         rank = response.css('span.numbers.ranked > strong::text').get()
         popularity = response.css('span.numbers.popularity > strong::text').get()
         rating = response.css('div.score-label::text').get()
-        genres = response.css('span[itemprop="genre"]::text').getall()
+        genres = f(response, "Genres:", "Genre:")
+        themes = f(response, "Themes:", "Theme:")
+        demographic = f(response, "Demographic:", "Demographics:")
         publish = response.xpath('//div[contains(span[@class="dark_text"], "Published:")]/text()').get()
-        authors = response.xpath('//div[@class="spaceit_pad"]/span[@class="dark_text"][contains(text(), "Authors")]/following-sibling::a/text()').getall()
-        decription_text = response.css('span[itemprop="description"]').get()
-        synopsis = scrapy.Selector(text=decription_text).xpath('//text()').getall()
-        synopsis = ' '.join(synopsis).replace('\r\n', '').replace('\n', '').replace('\r', '').replace('\t', '').strip()
+        authors_text = response.xpath('//div[@class="spaceit_pad"]/span[@class="dark_text"][contains(text(), "Authors")]/following-sibling::a/text()').getall()
+        authors = [i.replace(", ", " ") for i in authors_text]
+        synopsis = response.css('span[itemprop="description"]::text').get()
 
         item = {
             'rank': rank[1:],
@@ -38,9 +38,26 @@ class MangaScraper(scrapy.Spider):
             'rating': rating,
             'popularity': popularity.replace("#", ""),
             'genres': genres,
+            'themes': themes,
+            'demographic': demographic,
             'publish': publish[:14].strip().replace("  ", " "),
             'authors': authors,
-            'synopsis': synopsis,
+            'synopsis': synopsis
         }
 
         yield item
+
+def f(response, x, y):
+    b = None
+    a = response.css("div.spaceit_pad")
+    for i in range(len(a)):
+        if a[i].css("span::text").get() == x or a[i].css("span::text").get() == y:
+            b = a[i]
+    if b == None:
+        return []
+    item = []
+    c = b.css("span")
+    for i in range(len(c)):
+        if c[i].css("::text").get() != x and c[i].css("::text").get() != y:
+            item.append(c[i].css("::text").get())
+    return item
