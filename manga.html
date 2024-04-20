@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Data Table CSS File -->
+    <link rel="stylesheet" type="text/css"href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" type="text/css"href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+
+    <!-- Data Table JS File -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+</head>
+<body>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>ATwoh</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Nova
+    * Template URL: https://bootstrapmade.com/nova-bootstrap-business-template/
+    * Updated: Mar 17 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <style>
+      .sinopsis-container {
+          position: absolute;
+          background-color: #1b2f45;
+          border: 1px solid #000;
+          padding: 10px;
+          z-index: 9000;
+          display: none;
+          pointer-events: none;
+          color: #fff;
+          font-family: 'Times New Roman', Times, serif;
+          font-size: 14px;
+          text-align: justify;
+          max-width: 500px;
+          overflow: auto;
+      }
+
+      .Sinopsis-title {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          text-decoration: underline;
+      }
+      
+  </style>
+    </head>
+
+    <body class="page-index">
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="index.html" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <!-- <img src="assets/img/logo.png" alt=""> -->
+            <h1 class="d-flex align-items-center">ATwoh</h1>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">Profile</a></li>
+            <li class="dropdown"><a href="#" class="active"><span>Project</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <ul>
+                <li><a href="manga.html">Web Scraping - Top Manga</a></li>
+                </ul>
+            </li>
+            <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav><!-- .navbar -->
+
+        </div>
+    </header><!-- End Header -->
+
+    <main id="main">
+
+        <!-- ======= Breadcrumbs ======= -->
+        <div class="breadcrumbs d-flex align-items-center" style="background-image: url('assets/img/about-header.jpg');">
+        <div class="container position-relative d-flex flex-column align-items-center">
+    
+            <h2>Top Manga</h2>
+            <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Top Manga</li>
+            </ol>
+    
+        </div>
+        </div><!-- End Breadcrumbs -->
+
+        <div class="container my-5">
+          <div class="card manga-card" style="width: 40%;">
+            <div class="card-header-custom text-center">
+              <div class="card-title fw-bold">Berserk</div>
+              <div class="card-genre small">Action, Adventure, Award Winning, Drama, Fantasy</div>
+            </div>
+            <div class="card-body-custom">
+              <img class="image" src="data/images/1_157897.jpg" alt="Card image cap">
+              <div class="card-text">
+                <div class="synopsis">lorem ipsum dolor sit amet constecterur</div>
+                <div class="authors">Authors : Miura Kentarou, Studio Gaga</div>
+                <div class="publish">Published : Aug 25, 1989</div>
+                <div class="themes">Themes : Gore, Military, Mythology, Psychological</div>
+                <div class="demographic">Demographic : Seinen</div>
+              </div>
+            </div>
+            <div class="card-footer-custom d-flex justify-content-between">
+              <div class="rank">
+                <div class="label">Rank</div>
+                <div>1</div>
+              </div>
+              <div class="rating">
+                <div class="label">Score</div>
+                <div><i class="bi bi-star"></i> 9.47</div>
+              </div>
+              <div class="popularity">
+                <div class="label">Popularity</div>
+                <div>1</div>
+              </div>
+            </div>
+            <!-- <div class="card-body">
+              <p class="card-text">Berserk</p>
+            </div> -->
+          </div>
+
+          <table id="manga-table" class="table table-striped table-bordered" style="width:100%">
+              <thead>
+                  <tr>
+                      <th>Rank</th>
+                      <th>Image</th>
+                      <th>Title</th>
+                      <th>Rating</th>
+                      <th>Popularity</th>
+                      <th>Genres</th>
+                      <th>Authors</th>
+                      <th>Publish Date</th>
+                  </tr>
+              </thead>
+              <tbody></tbody>
+          </table>
+          <div class="sinopsis-container">
+            <h5 class="Sinopsis-title">Sinopsis</h5>
+            <div class="sinopsis-content"></div>
+          </div>
+        </div>
+
+
+        <script>
+          $(document).ready(function () {
+              var table;
+
+              $.getJSON('data/manga.json', function (data) {
+                  table = $('#manga-table').DataTable({
+                      data: data,
+                      columns: [
+                          { data: 'rank' },
+                          {
+                              data: 'images[0].path',
+                              render: function (data, type, row) {
+                                  return '<a href="' + data + '" target="_blank"><img src="data/images/' + data + '" height="100"></a>';
+                                }
+                          },
+                          {
+                              data: 'title',
+                              render: function (data, type, row) {
+                                  return '<span class="manga-title">' + data + '</span>';
+                              }
+                          },
+                          { data: 'rating' },
+                          { data: 'popularity' },
+                          {
+                              data: 'genres',
+                              render: function (data) {
+                                  return data.join(', ');
+                              }
+                          },
+                          {
+                              data: 'authors',
+                              render: function (data) {
+                                  return data.join(', ');
+                              }
+                          },
+                          { data: 'publish' }
+                      ],
+                      responsive: true,
+                  });
+              });
+
+              // Delegasi event mousemove ke elemen body
+              $('body').on('mousemove', '.manga-title', function (e) {
+                  var $container = $('.sinopsis-container');
+                  if ($container.is(':visible')) {
+                      var containerHeight = $container.outerHeight();
+                      var containerWidth = $container.outerWidth();
+                      var viewportHeight = $(window).height();
+                      var viewportWidth = $(window).width();
+                      var top, left;
+
+                      if (e.pageY + containerHeight > viewportHeight) {
+                          top = e.pageY - containerHeight - 10;
+                      } else {
+                          top = e.pageY + 10;
+                      }
+
+                      if (e.pageX + containerWidth > viewportWidth) {
+                          left = e.pageX - containerWidth - 10;
+                      } else {
+                          left = e.pageX + 10;
+                      }
+
+                      $container.css({
+                          left: left,
+                          top: top,
+                      });
+                  }
+              });
+
+              // Menambahkan penanganan acara mouseenter dan mouseleave di luar fungsi getJSON
+              $('body').on('mouseenter', '.manga-title', function (e) {
+                  var row = table.row($(this).closest('tr'));
+                  var data = row.data();
+                  var sinopsis = data.synopsis;
+                  var $container = $('.sinopsis-container');
+                  var $sinopsisText = $container.find('.sinopsis-content');
+
+                  $sinopsisText.html(sinopsis);
+                  $container.show();
+              });
+
+              $('body').on('mouseleave', '.manga-title', function () {
+                  $('.sinopsis-container').hide();
+              });
+          });
+        </script>
+
+    </main><!-- End #main -->
+
+      <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="index.html" class="logo d-flex align-items-center">
+              <span>ATwoh</span>
+            </a>
+            <p>
+              Kelompok mahasiswa Jurusan Teknik Komputer dan Informatika Politeknik Negeri Bandung yang mengembangkan website dalam praktikum Proyek I Pengembangan Perangkat Lunak Desktop. 
+            </p>
+            <div class="social-links d-flex  mt-3">
+              <a href="https://twitter.com/polbanfess" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="https://www.facebook.com/polbanofficial" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/politekniknegeribandung/?hl=id" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://id.linkedin.com/school/polban/" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Links</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="index.html">Home</a></li>
+              <li><i class="bi bi-dash"></i> <a href="index.html">Job Desk</a></li>
+              <li><i class="bi bi-dash"></i> <a href="about.html">Profile</a></li>
+              <li><i class="bi bi-dash"></i> <a href="manga.html">Project</a></li>
+              <li><i class="bi bi-dash"></i> <a href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Project</h4>
+            <ul>
+              <li><i class="bi bi-dash"></i> <a href="#">Web Scraping -  Top Manga</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p>
+              Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong <br>
+              Kabupaten Bandung Barat, Jawa Barat<br>
+              Kode Pos 40559  |  Kotak Pos Bandung 1234 <br><br>
+              <strong>Phone:</strong> 022 – 2013789<br>
+              <strong>Email:</strong> polban@polban.ac.id <br>
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>ATwoh</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nova-bootstrap-business-template/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </div>
+    </div>
+  </footer><!-- End Footer --><!-- End Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
