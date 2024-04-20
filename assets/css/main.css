@@ -2197,7 +2197,6 @@ section {
   color: white;
 }
 
-
 .manga-card {
   overflow: hidden;
   width: 32%;
@@ -2216,12 +2215,19 @@ section {
   column-gap: 1em;
   padding: 1em;
   overflow-y: scroll;
+  height: 240px;
 }
 
-.manga-card .card-body-custom img {
+.manga-card .card-body-custom .image {
   width: 40%;
   border-radius: 0.4em;
   aspect-ratio: 45/64;
+  flex-shrink: 0;
+}
+
+.filter-custom {
+  display: flex;
+  row-gap: 1em;
 }
 
 .manga-card .card-body-custom .card-text {
@@ -2315,5 +2321,16 @@ section {
 .page-item.active .page-link {
   background-color: var(--color-secondary) !important;
   color: white !important;
+  border: 1px solid var(--color-secondary);
+}
+
+.btn.sortable {
+  background-color: white;
+  border: 1px solid #ced4da;;
+}
+
+.btn.sortable.asc, .btn.sortable.desc {
+  background-color: var(--color-secondary);
+  color: white;
   border: 1px solid var(--color-secondary);
 }
