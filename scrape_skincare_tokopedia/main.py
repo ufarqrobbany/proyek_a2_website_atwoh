@@ -7,8 +7,8 @@ import json
 
 # Initialize Chrome options
 chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--start-minimized")
+# chrome_options.add_argument("--headless")
+# chrome_options.add_argument("--start-minimized")
 
 # Start the Chrome driver
 driver = webdriver.Chrome(options=chrome_options)
@@ -49,12 +49,9 @@ def scroll_to_bottom():
 
 def scrape_page():
     arr_of_dict = []
-    time.sleep(5)
-    scroll_to_bottom()
-    time.sleep(3)
-    scroll_to_bottom()
-    time.sleep(3)
-    scroll_to_bottom()
+    for i in range(2):
+        time.sleep(3)
+        scroll_to_bottom()
 
     all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
     lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
@@ -70,7 +67,6 @@ def scrape_page():
                 try:
                     product_link = obj.find_element(By.CLASS_NAME, "css-1asz3by").find_element(By.TAG_NAME, 'a')
                 except:
-                    print("Produk tidak ditemukan")
                     continue
 
                 url = product_link.get_attribute('href')
@@ -108,25 +104,56 @@ def scrape_page():
 
 def scrape_data(search_term, label):
     arr_of_dict = []
-    for i in range(20):
+
+    print(f"Kategori \"{label}\"")
+    for i in range(2):
         retries = 3
         while retries > 0:
-            driver.get(
-                f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
+            driver.get(f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
             driver.implicitly_wait(10)
             page_data = scrape_page()
             if len(page_data) == 85:
                 arr_of_dict.extend(page_data)
                 print(f"Halaman {i + 1}: {len(page_data)} produk berhasil diambil.")
+                # Append data directly to the JSON file
+                append_to_json(label, page_data)
                 break
             else:
                 retries -= 1
-                print(f"Gagal mengambil semua produk di halaman {i + 1}, mencoba lagi ({3 - retries} / 3)")
+                print(f"Halaman {i + 1}: {len(page_data)} produk berhasil diambil. Gagal mengambil semua produk, mencoba lagi ({3 - retries} / 3)")
 
         if retries == 0:
-            print(f"Gagal mengambil semua produk di halaman {i + 1} setelah 3 kali percobaan, melanjutkan ke halaman berikutnya.")
+            print(f"Gagal mengambil semua produk di halaman {i + 1} setelah 3 kali percobaan, melanjutkan ke label berikutnya.")
+            return
 
-    return {"label": label, "items": arr_of_dict}
+
+def append_to_json(label, new_items):
+    try:
+        if not os.path.isfile('tokopedia_data.json'):
+            with open('tokopedia_data.json', 'w', encoding='utf-8') as f:
+                json.dump([{"label": label, "items": new_items}], f, ensure_ascii=False, indent=4)
+        else:
+            with open('tokopedia_data.json', 'r+', encoding='utf-8') as f:
+                try:
+                    file_data = json.load(f)
+                except json.JSONDecodeError:
+                    file_data = []
+
+                # Check if the label exists
+                label_exists = False
+                for entry in file_data:
+                    if entry['label'] == label:
+                        entry['items'].extend(new_items)
+                        label_exists = True
+                        break
+
+                if not label_exists:
+                    file_data.append({"label": label, "items": new_items})
+
+                f.seek(0)
+                json.dump(file_data, f, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Error appending to JSON file: {e}")
 
 
 search_terms = [
@@ -135,7 +162,6 @@ search_terms = [
     {"term": "face wash anti aging", "label": "Anti Aging"}
 ]
 
-results = []
 os.system('cls')
 
 for search in search_terms:
@@ -144,11 +170,6 @@ for search in search_terms:
     search_box.send_keys(f"{search['term']}\n")
     time.sleep(10)
 
-    search_results = scrape_data(search["term"], search["label"])
-    results.append(search_results)
-
-# Save data to JSON file
-with open('tokopedia_data.json', 'w', encoding='utf-8') as f:
-    json.dump(results, f, ensure_ascii=False, indent=4)
+    scrape_data(search["term"], search["label"])
 
 driver.quit()
