@@ -47,89 +47,84 @@ def scroll_to_bottom():
         driver.execute_script(f"window.scrollTo(0, {position});")
 
 
+def scrape_page():
+    arr_of_dict = []
+    time.sleep(5)
+    scroll_to_bottom()
+    time.sleep(3)
+    scroll_to_bottom()
+    time.sleep(3)
+    scroll_to_bottom()
+
+    all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
+    lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
+
+    for product in lines:
+        try:
+            objs = product.find_elements(By.CLASS_NAME, "css-llwpbs")
+        except:
+            continue
+
+        for obj in objs:
+            try:
+                try:
+                    product_link = obj.find_element(By.CLASS_NAME, "css-1asz3by").find_element(By.TAG_NAME, 'a')
+                except:
+                    print("Produk tidak ditemukan")
+                    continue
+
+                url = product_link.get_attribute('href')
+                title = product_link.find_element(By.CLASS_NAME, "css-3um8ox").text
+                price_str = product_link.find_element(By.CLASS_NAME, "css-h66vau").text
+
+                try:
+                    rating_str = product_link.find_element(By.CLASS_NAME, "css-t70v7i").text
+                    rating = clean_rating(rating_str)
+                except:
+                    rating = None
+
+                try:
+                    terjual_str = product_link.find_element(By.CLASS_NAME, "css-1sgek4h").text
+                    terjual = clean_terjual(terjual_str)
+                except:
+                    terjual = None
+
+                price = clean_price(price_str)
+
+                dataset = createDataset()
+                dataset['url'] = url
+                dataset['title'] = title
+                dataset['price'] = price
+                dataset['rating'] = rating
+                dataset['terjual'] = terjual
+                arr_of_dict.append(dataset)
+
+            except Exception as e:
+                print(f"Error: {e}")
+                pass
+
+    return arr_of_dict
+
+
 def scrape_data(search_term, label):
     arr_of_dict = []
     for i in range(20):
-        jumlah_produk_per_halaman = 0
+        retries = 3
+        while retries > 0:
+            driver.get(
+                f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
+            driver.implicitly_wait(10)
+            page_data = scrape_page()
+            if len(page_data) == 85:
+                arr_of_dict.extend(page_data)
+                print(f"Halaman {i + 1}: {len(page_data)} produk berhasil diambil.")
+                break
+            else:
+                retries -= 1
+                print(f"Gagal mengambil semua produk di halaman {i + 1}, mencoba lagi ({3 - retries} / 3)")
 
-        # Scroll ke bawah agar semua baris produk muncul
-        time.sleep(5)
-        scroll_to_bottom()
-        time.sleep(3)
-        scroll_to_bottom()
-        time.sleep(3)
-        scroll_to_bottom()
-
-        all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
-        lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
-
-        for product in lines:
-            try:
-                objs = product.find_elements(By.CLASS_NAME, "css-llwpbs")
-            except:
-                continue
-
-            for obj in objs:
-                try:
-                    try:
-                        product_link = obj.find_element(By.CLASS_NAME, "css-1asz3by").find_element(By.TAG_NAME, 'a')
-                    except:
-                        print("Produk tidak ditemukan")
-                        continue
-
-                    url = product_link.get_attribute('href')
-                    title = product_link.find_element(By.CLASS_NAME, "css-3um8ox").text
-                    price_str = product_link.find_element(By.CLASS_NAME, "css-h66vau").text
-
-                    try:
-                        rating_str = product_link.find_element(By.CLASS_NAME, "css-t70v7i").text
-                        rating = clean_rating(rating_str)
-                    except:
-                        rating = None
-
-                    try:
-                        terjual_str = product_link.find_element(By.CLASS_NAME, "css-1sgek4h").text
-                        terjual = clean_terjual(terjual_str)
-                    except:
-                        terjual = None
-
-                    price = clean_price(price_str)
-
-                    print(jumlah_produk_per_halaman + 1)
-                    print(url)
-                    print(title)
-                    print(price)
-                    print(rating)
-                    print(terjual)
-                    print()
-
-                    dataset = createDataset()
-                    dataset['url'] = url
-                    dataset['title'] = title
-                    dataset['price'] = price
-                    dataset['rating'] = rating
-                    dataset['terjual'] = terjual
-                    arr_of_dict.append(dataset)
-
-                    jumlah_produk_per_halaman += 1
-                except Exception as e:
-                    print(f"Error: {e}")
-                    pass
-
-        total_height = driver.execute_script("return document.body.scrollHeight")
-        for position in range(total_height, 0, -100):
-            driver.execute_script(f"window.scrollTo(0, {position});")
-
-        if(jumlah_produk_per_halaman != 85):
-            print(f"Gagal mengambil semua produk di halaman {i + 1}, label \"{label}\"")
-            break
-            
-
-        print(f"Halaman {i + 1}: {jumlah_produk_per_halaman}")
-
-        driver.get(
-            f"https://www.tokopedia.com/search?navsource=home&page={2 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
-        driver.implicitly_wait(10)
+        if retries == 0:
+            print(f"Gagal mengambil semua produk di halaman {i + 1} setelah 3 kali percobaan, melanjutkan ke halaman berikutnya.")
 
     return {"label": label, "items": arr_of_dict}
 
