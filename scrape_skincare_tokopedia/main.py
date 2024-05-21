@@ -120,6 +120,11 @@ def scrape_data(search_term, label):
         for position in range(total_height, 0, -100):
             driver.execute_script(f"window.scrollTo(0, {position});")
 
+        if(jumlah_produk_per_halaman != 85):
+            print(f"Gagal mengambil semua produk di halaman {i + 1}, label \"{label}\"")
+            break
+            
+
         print(f"Halaman {i + 1}: {jumlah_produk_per_halaman}")
 
         driver.get(
