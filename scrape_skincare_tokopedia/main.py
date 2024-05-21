@@ -60,17 +60,17 @@ def scrape_page():
         time.sleep(3)
         scroll_to_bottom()
 
-    all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
-    try:
-        lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
-    except:
-        print("There was an error")
+    # all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
+    all_selected = driver.find_element(By.XPATH, '//*[@data-testid="divSRPContentProducts"]')
+    lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
+    if len(lines) == 0:
+        print("No lines found")
 
     for product in lines:
         try:
             objs = product.find_elements(By.CLASS_NAME, "css-llwpbs")
         except:
-            print("Tidak ada produk satupun")
+            print("No objects found")
             continue
 
         for obj in objs:
@@ -78,7 +78,7 @@ def scrape_page():
                 try:
                     product_link = obj.find_element(By.CLASS_NAME, "css-1asz3by").find_element(By.TAG_NAME, 'a')
                 except:
-                    print("tidak ada produk")
+                    print("No product found")
                     continue
 
                 url = product_link.get_attribute('href')
@@ -99,7 +99,7 @@ def scrape_page():
 
                 price = clean_price(price_str)
 
-                print(f"{len(arr_of_dict) + 1} - {title}")
+                print(f"     {len(arr_of_dict) + 1} - {title}")
 
                 dataset = createDataset()
                 dataset['url'] = url
@@ -121,7 +121,7 @@ def scrape_data(search_term, label):
 
     print("=====================================")
     print(f"Kategori \"{label}\"")
-    for i in range(2):
+    for i in range(20):
         retries = 3
         while retries > 0:
             if i != 0:
