@@ -105,12 +105,14 @@ def scrape_page():
 def scrape_data(search_term, label):
     arr_of_dict = []
 
+    print("=====================================")
     print(f"Kategori \"{label}\"")
     for i in range(2):
         retries = 3
         while retries > 0:
-            driver.get(f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
-            driver.implicitly_wait(10)
+            if i != 0:
+                driver.get(f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
+                driver.implicitly_wait(10)
             page_data = scrape_page()
             if len(page_data) == 85:
                 arr_of_dict.extend(page_data)
