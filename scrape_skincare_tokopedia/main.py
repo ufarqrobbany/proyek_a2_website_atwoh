@@ -41,9 +41,16 @@ def clean_terjual(terjual_str):
         return int(float(terjual_str.replace('rb', '')) * 1000)
     return int(terjual_str)
 
+
 def scroll_to_bottom():
     total_height = driver.execute_script("return document.body.scrollHeight") * 10
     for position in range(0, total_height, 100):
+        driver.execute_script(f"window.scrollTo(0, {position});")
+
+
+def scroll_to_top():
+    total_height = driver.execute_script("return document.body.scrollHeight")
+    for position in range(total_height, 0, -100):
         driver.execute_script(f"window.scrollTo(0, {position});")
 
 
@@ -98,7 +105,7 @@ def scrape_page():
             except Exception as e:
                 print(f"Error: {e}")
                 pass
-
+    scroll_to_top()
     return arr_of_dict
 
 
