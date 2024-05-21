@@ -56,17 +56,21 @@ def scroll_to_top():
 
 def scrape_page():
     arr_of_dict = []
-    for i in range(2):
+    for i in range(3):
         time.sleep(3)
         scroll_to_bottom()
 
     all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
-    lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
+    try:
+        lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
+    except:
+        print("There was an error")
 
     for product in lines:
         try:
             objs = product.find_elements(By.CLASS_NAME, "css-llwpbs")
         except:
+            print("Tidak ada produk satupun")
             continue
 
         for obj in objs:
@@ -74,6 +78,7 @@ def scrape_page():
                 try:
                     product_link = obj.find_element(By.CLASS_NAME, "css-1asz3by").find_element(By.TAG_NAME, 'a')
                 except:
+                    print("tidak ada produk")
                     continue
 
                 url = product_link.get_attribute('href')
@@ -93,6 +98,8 @@ def scrape_page():
                     terjual = None
 
                 price = clean_price(price_str)
+
+                print(f"{len(arr_of_dict) + 1} - {title}")
 
                 dataset = createDataset()
                 dataset['url'] = url
