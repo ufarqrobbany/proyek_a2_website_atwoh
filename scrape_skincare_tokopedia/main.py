@@ -128,7 +128,7 @@ def scrape_data(search_term, label):
                 driver.get(f"https://www.tokopedia.com/search?navsource=home&page={1 + i}&q={search_term}&source=universe&srp_component_id=01.02.01.01&st=product")
                 driver.implicitly_wait(10)
             page_data = scrape_page()
-            if len(page_data) == 85:
+            if len(page_data) >= 50:
                 arr_of_dict.extend(page_data)
                 print(f"Halaman {i + 1}: {len(page_data)} produk berhasil diambil.")
                 # Append data directly to the JSON file
