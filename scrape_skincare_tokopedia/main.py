@@ -81,7 +81,7 @@ def scrape_page():
                     print("No product found")
                     continue
 
-                url = product_link.get_attribute('href')
+                # url = product_link.get_attribute('href')
                 title = product_link.find_element(By.CLASS_NAME, "css-3um8ox").text
                 price_str = product_link.find_element(By.CLASS_NAME, "css-h66vau").text
 
@@ -102,7 +102,7 @@ def scrape_page():
                 print(f"     {len(arr_of_dict) + 1} - {title}")
 
                 dataset = createDataset()
-                dataset['url'] = url
+                # dataset['url'] = url
                 dataset['title'] = title
                 dataset['price'] = price
                 dataset['rating'] = rating
