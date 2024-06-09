@@ -108,6 +108,24 @@
         <canvas id="myChart3"></canvas>
       </div>
     </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div class="chart-container" id="acneChartContainer" style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Rata-Rata Harga Merk Per Kategori Acne</h2>
+        <canvas id="acneChart"></canvas>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div class="chart-container" id="antiAgingChartContainer" style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Rata-Rata Harga Merk Per Kategori Anti Aging</h2>
+        <canvas id="antiAgingChart"></canvas>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div class="chart-container" id="brighteningChartContainer" style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Rata-Rata Harga Merk Per Kategori Brightening</h2>
+        <canvas id="brighteningChart"></canvas>
+      </div>
+    </div>
 
 
     <!-- End Analisis Tren Skincare Section -->
@@ -274,148 +292,274 @@
 
   <script>
     // Fetch and process data from tokopedia.json
-fetch('scrape_skincare_tokopedia/tokopedia_data.json')
-.then(response => response.json())
-.then(data => {
-    const maxTerjual = 1000;
-    const ratingThreshold = 4.0;
+    fetch('scrape_skincare_tokopedia/tokopedia_data.json')
+      .then(response => response.json())
+      .then(data => {
+        const maxTerjual = 1000;
+        const ratingThreshold = 4.0;
 
-    let categoryData = {
-        Acne: { ratings: [], sold: [] },
-        Brightening: { ratings: [], sold: [] },
-        "Anti Aging": { ratings: [], sold: [] }
-    };
+        let categoryData = {
+          Acne: { ratings: [], sold: [] },
+          Brightening: { ratings: [], sold: [] },
+          "Anti Aging": { ratings: [], sold: [] }
+        };
 
-    data.forEach(category => {
-        category.items.forEach(item => {
+        data.forEach(category => {
+          category.items.forEach(item => {
             if (item.rating && item.terjual && item.terjual < maxTerjual && item.rating >= ratingThreshold) {
-                categoryData[category.label].ratings.push(item.rating);
-                categoryData[category.label].sold.push(item.terjual);
+              categoryData[category.label].ratings.push(item.rating);
+              categoryData[category.label].sold.push(item.terjual);
             }
+          });
         });
-    });
 
-    // Combine data for scatter plot
-    let scatterData = [];
-    Object.keys(categoryData).forEach(category => {
-        scatterData.push({
+        // Combine data for scatter plot
+        let scatterData = [];
+        Object.keys(categoryData).forEach(category => {
+          scatterData.push({
             label: category,
             data: categoryData[category].ratings.map((rating, index) => ({ x: rating, y: categoryData[category].sold[index] })),
             backgroundColor: getCategoryColor(category),
             pointStyle: getCategoryPointStyle(category)
+          });
         });
-    });
-    createScatterPlot('myChart2', scatterData);
+        createScatterPlot('myChart2', scatterData);
 
-    // Create multi-line chart for all categories
-    createMultiLineChart(categoryData);
-})
-.catch(error => console.error('Error fetching data:', error));
+        // Create multi-line chart for all categories
+        createMultiLineChart(categoryData);
+      })
+      .catch(error => console.error('Error fetching data:', error));
 
-function getCategoryColor(category) {
-const colors = {
-    Acne: 'rgba(75, 192, 192, 1)',
-    Brightening: 'rgba(255, 159, 64, 1)',
-    "Anti Aging": 'rgba(153, 102, 255, 1)'
-};
-return colors[category];
-}
+    function getCategoryColor(category) {
+      const colors = {
+        Acne: 'rgba(75, 192, 192, 1)',
+        Brightening: 'rgba(255, 159, 64, 1)',
+        "Anti Aging": 'rgba(153, 102, 255, 1)'
+      };
+      return colors[category];
+    }
 
-function getCategoryPointStyle(category) {
-const styles = {
-    Acne: 'circle',
-    Brightening: 'triangle',
-    "Anti Aging": 'rect'
-};
-return styles[category];
-}
+    function getCategoryPointStyle(category) {
+      const styles = {
+        Acne: 'circle',
+        Brightening: 'triangle',
+        "Anti Aging": 'rect'
+      };
+      return styles[category];
+    }
 
-function createScatterPlot(canvasId, scatterData) {
-const ctx = document.getElementById(canvasId).getContext('2d');
-new Chart(ctx, {
-    type: 'scatter',
-    data: {
-        datasets: scatterData
-    },
-    options: {
-        scales: {
+    function createScatterPlot(canvasId, scatterData) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      new Chart(ctx, {
+        type: 'scatter',
+        data: {
+          datasets: scatterData
+        },
+        options: {
+          scales: {
             x: {
-                title: {
-                    display: true,
-                    text: 'Rating'
-                },
-                min: 4.0,
-                max: 5.0,
-                ticks: {
-                    stepSize: 0.1
-                }
+              title: {
+                display: true,
+                text: 'Rating'
+              },
+              min: 4.0,
+              max: 5.0,
+              ticks: {
+                stepSize: 0.1
+              }
             },
             y: {
-                title: {
-                    display: true,
-                    text: 'Sold'
-                }
+              title: {
+                display: true,
+                text: 'Sold'
+              }
             }
+          }
         }
+      });
     }
-});
-}
 
-function createMultiLineChart(categoryData) {
-const ctx = document.getElementById('myChart3').getContext('2d');
-const listRating = Array.from({ length: 11 }, (_, i) => 4.0 + i * 0.1);
+    function createMultiLineChart(categoryData) {
+      const ctx = document.getElementById('myChart3').getContext('2d');
+      const listRating = Array.from({ length: 11 }, (_, i) => 4.0 + i * 0.1);
 
-const datasets = Object.keys(categoryData).map(category => {
-    const soldBin = listRating.map(r => {
-        const bin = [];
-        categoryData[category].ratings.forEach((rate, index) => {
+      const datasets = Object.keys(categoryData).map(category => {
+        const soldBin = listRating.map(r => {
+          const bin = [];
+          categoryData[category].ratings.forEach((rate, index) => {
             if (rate.toFixed(1) == r.toFixed(1)) {
-                bin.push(categoryData[category].sold[index]);
+              bin.push(categoryData[category].sold[index]);
             }
+          });
+          const mean = bin.length ? bin.reduce((a, b) => a + b, 0) / bin.length : 0;
+          return mean;
         });
-        const mean = bin.length ? bin.reduce((a, b) => a + b, 0) / bin.length : 0;
-        return mean;
-    });
 
-    return {
-        label: category,
-        data: soldBin,
-        fill: false,
-        borderColor: getCategoryColor(category),
-        tension: 0.1
-    };
-});
+        return {
+          label: category,
+          data: soldBin,
+          fill: false,
+          borderColor: getCategoryColor(category),
+          tension: 0.1
+        };
+      });
 
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: listRating,
-        datasets: datasets
-    },
-    options: {
-        scales: {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: listRating,
+          datasets: datasets
+        },
+        options: {
+          scales: {
             x: {
-                title: {
-                    display: true,
-                    text: 'Rating'
-                },
-                min: 4.0,
-                max: 5.0,
-                ticks: {
-                    stepSize: 0.1
-                }
+              title: {
+                display: true,
+                text: 'Rating'
+              },
+              min: 4.0,
+              max: 5.0,
+              ticks: {
+                stepSize: 0.1
+              }
             },
             y: {
-                title: {
-                    display: true,
-                    text: 'Mean Sold'
-                }
+              title: {
+                display: true,
+                text: 'Mean Sold'
+              }
             }
+          }
         }
+      });
     }
-});
-}
+  </script>
+  <script>
+    // Function to get unique elements from an array
+    function getUnique(data) {
+      return [...new Set(data)];
+    }
 
+    // Function to calculate mean prices
+    function getMeans(labels, prices, brands) {
+      const sums = new Array(labels.length).fill(0);
+      const counts = new Array(labels.length).fill(0);
+
+      prices.forEach((price, index) => {
+        const brandIndex = labels.indexOf(brands[index]);
+        sums[brandIndex] += price;
+        counts[brandIndex] += 1;
+      });
+
+      return sums.map((sum, index) => sum / counts[index]);
+    }
+
+    // Function to get data from the JSON structure
+    function getData(data, kategori) {
+      const prices = [];
+      const brands = [];
+
+      data.forEach(category => {
+        if (category.label === kategori) {
+          category.items.forEach(item => {
+            prices.push(item.price);
+            brands.push(item.brand);
+          });
+        }
+      });
+
+      return { prices, brands };
+    }
+
+    // Function to create a bar chart
+    function createBarChart(chartId, labels, data, category) {
+      const categoryColors = {
+        'Acne': 'rgba(75, 192, 192, 0.5)',
+        'Anti Aging': 'rgba(255, 159, 64, 0.5)',
+        'Brightening': 'rgba(153, 102, 255, 0.5)'
+      };
+      const borderColors = {
+        'Acne': 'rgba(75, 192, 192, 1)',
+        'Anti Aging': 'rgba(255, 159, 64, 1)',
+        'Brightening': 'rgba(153, 102, 255, 1)'
+      };
+
+      const ctx = document.getElementById(chartId).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: category,
+            data: data,
+            backgroundColor: categoryColors[category],
+            borderColor: borderColors[category],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Brand'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Mean Price'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true
+            }
+          }
+        }
+      });
+    }
+
+    // Fetch data from JSON file and create the charts
+    fetch('scrape_skincare_tokopedia/tokopedia_data_with_brand.json')
+      .then(response => response.json())
+      .then(data => {
+        const categories = ['Acne', 'Anti Aging', 'Brightening'];
+
+        categories.forEach(category => {
+          const { prices, brands } = getData(data, category);
+          const labels = getUnique(brands);
+          const means = getMeans(labels, prices, brands);
+
+          // Combine labels and means into an array of objects
+          const combined = labels.map((label, index) => ({
+            brand: label,
+            mean: means[index]
+          }));
+
+          // Sort the combined array by mean price in descending order
+          combined.sort((a, b) => b.mean - a.mean);
+
+          // Take the top 20 items
+          const top20 = combined.slice(0, 20);
+
+          // Extract the sorted labels and means for the top 20 items
+          const top20Labels = top20.map(item => item.brand);
+          const top20Means = top20.map(item => item.mean);
+
+          if (category === 'Acne') {
+            createBarChart('acneChart', top20Labels, top20Means, category);
+          } else if (category === 'Anti Aging') {
+            createBarChart('antiAgingChart', top20Labels, top20Means, category);
+          } else if (category === 'Brightening') {
+            createBarChart('brighteningChart', top20Labels, top20Means, category);
+          }
+        });
+      })
+      .catch(error => console.error('Error fetching data:', error));
   </script>
 
 </body>
