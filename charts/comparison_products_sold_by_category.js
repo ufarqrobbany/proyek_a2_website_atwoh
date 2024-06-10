@@ -1,6 +1,6 @@
 // Fungsi untuk mengambil data dari file JSON
 async function fetchData() {
-  const response = await fetch('../scrape_skincare_tokopedia/tokopedia_data.json');
+  const response = await fetch('../scrape_skincare_tokopedia/tokopedia_data_with_brand.json');
   const data = await response.json();
   return data;
 }
@@ -11,7 +11,7 @@ function getTotalPenjualan(data, keywords) {
   for (let d of data) {
     if (d.label === keywords) {
       for (let h of d.items) {
-        total = total + h.terjual;
+        total = total + h.sold;
       }
     }
   }

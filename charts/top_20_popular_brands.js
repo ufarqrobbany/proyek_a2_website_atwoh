@@ -2,10 +2,10 @@ function getTopBrandsByAverageSold(data, label) {
   const labelData = data.find(item => item.label === label);
   const brands = {};
 
-  // Menghitung total terjual untuk setiap merek dan jumlah item merek tersebut
+  // Menghitung total sold untuk setiap merek dan jumlah item merek tersebut
   labelData.items.forEach(item => {
       const brand = item.brand;
-      const sold = item.terjual;
+      const sold = item.sold;
       if (brands[brand]) {
           brands[brand].totalSold += sold;
           brands[brand].count++;
@@ -14,13 +14,13 @@ function getTopBrandsByAverageSold(data, label) {
       }
   });
 
-  // Menghitung rata-rata terjual untuk setiap merek
+  // Menghitung rata-rata sold untuk setiap merek
   const brandAverages = {};
   Object.keys(brands).forEach(brand => {
       brandAverages[brand] = brands[brand].totalSold / brands[brand].count;
   });
 
-  // Mengurutkan merek berdasarkan rata-rata terjual
+  // Mengurutkan merek berdasarkan rata-rata sold
   const sortedBrands = Object.keys(brandAverages).sort((a, b) => brandAverages[b] - brandAverages[a]);
   return sortedBrands.slice(0, 20);
 }
@@ -32,7 +32,7 @@ async function createChartPopular(label, chartId) {
     const brandAverageSold = brands.map(brand => {
         const totalSold = data.find(item => item.label === label).items
             .filter(item => item.brand === brand)
-            .reduce((acc, curr) => acc + curr.terjual, 0);
+            .reduce((acc, curr) => acc + curr.sold, 0);
         const itemCount = data.find(item => item.label === label).items
             .filter(item => item.brand === brand).length;
         return totalSold / itemCount;

@@ -1,8 +1,8 @@
 // Fetch and process data from tokopedia.json
-fetch('../scrape_skincare_tokopedia/tokopedia_data.json')
+fetch('../scrape_skincare_tokopedia/tokopedia_data_with_brand.json')
   .then(response => response.json())
   .then(data => {
-    const maxTerjual = 1000;
+    const maxsold = 1000;
     const ratingThreshold = 4.0;
 
     let categoryData = {
@@ -13,9 +13,9 @@ fetch('../scrape_skincare_tokopedia/tokopedia_data.json')
 
     data.forEach(category => {
       category.items.forEach(item => {
-        if (item.rating && item.terjual && item.terjual < maxTerjual && item.rating >= ratingThreshold) {
+        if (item.rating && item.sold && item.sold < maxsold && item.rating >= ratingThreshold) {
           categoryData[category.label].ratings.push(item.rating);
-          categoryData[category.label].sold.push(item.terjual);
+          categoryData[category.label].sold.push(item.sold);
         }
       });
     });
