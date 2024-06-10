@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Data Table CSS File -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.5/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.css">
+
+    <!-- Data Table JS File -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.2/js/responsive.bootstrap5.js"></script>
+</head>
+<body>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Data Scraping - Top Manga</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../assets/img/logo.png" rel="icon">
+    <link href="../assets/img/logo.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Nova
+    * Template URL: https://bootstrapmade.com/nova-bootstrap-business-template/
+    * Updated: Mar 17 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body class="page-index">
+
+<!-- ======= Header ======= -->
+<header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+        <a href="../index.html" class="logo d-flex align-items-center">
+            <!-- Uncomment the line below if you also wish to use an image logo -->
+            <img src="../assets/img/logo.png" alt="">
+            <h1 class="d-flex align-items-center">ATwoh</h1>
+        </a>
+
+        <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+        <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="about.html">Profile</a></li>
+                <li class="dropdown"><a href="#" class="active"><span>Projects</span> <i
+                    class="bi bi-chevron-down dropdown-indicator"></i></a>
+                <ul>
+                  <li><a href="manga.html">Data Scraping - Manga</a></li>
+                  <li><a href="skincare.html">Data Visualization - Skincare</a></li>
+                </ul>
+              </li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav><!-- .navbar -->
+
+    </div>
+</header><!-- End Header -->
+
+<main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs d-flex align-items-center" style="background-image: url('../assets/img/about-header.jpg');">
+        <div class="container position-relative d-flex flex-column align-items-center">
+
+            <h2>Top Manga</h2>
+            <ol>
+                <li><a href="../index.html">Home</a></li>
+                <li>Top Manga</li>
+            </ol>
+
+        </div>
+    </div><!-- End Breadcrumbs -->
+
+    <div class="container my-5">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search by title" id="searchInput">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary search-custom" type="button" id="searchButton"><i class="bi-search"></i></button>
+            </div>
+        </div>
+        <div class="row mb-3 filter-custom">
+            <div class="col-md-6">
+                <label for="typeFilter" class="form-label">Filter by Type:</label>
+                <select class="form-select" id="typeFilter">
+                    <option value="all">All Types</option>
+                    <option value="Manga">Manga</option>
+                    <option value="Manhwa">Manhwa</option>
+                    <option value="Manhua">Manhua</option>
+                    <option value="Light Novel">Light Novel</option>
+                    <option value="Novel">Novel</option>
+                    <option value="One-shot">One-shot</option>
+                    <option value="Doujinshi">Doujinshi</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="statusFilter" class="form-label">Filter by Status:</label>
+                <select class="form-select" id="statusFilter">
+                    <option value="all">All Statuses</option>
+                    <option value="Publishing">Publishing</option>
+                    <option value="Finished">Finished</option>
+                    <option value="On Hiatus">On Hiatus</option>
+                    <option value="Discontinued">Discontinued</option>
+                </select>
+            </div>
+        </div>
+        <div class="sort-button my-4">
+          <label class="me-3">Sort : </label>
+          <button class="btn sortable asc" data-column="rank" >Rank <i class="bi bi-sort"></i><span class="sort-indicator"><i class="bi bi-sort-up"></i></span></button>
+          <button class="btn sortable" data-column="title">Title <i class="bi bi-sort"></i></button>
+          <button class="btn sortable" data-column="popularity">Popularity <i class="bi bi-sort"></i></button>
+        </div>
+        <div class="container-manga">
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+            </ul>
+        </nav>
+    </div>
+    <div class="modal fade" id="synopsisModal" tabindex="-1" aria-labelledby="synopsisModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="synopsisModalLabel">Synopsis</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="synopsisContent"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/aos/aos.js"></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        const itemsPerPage = 12;
+        let currentPage = 1;
+        let totalPages = 0;
+        let originalData = []; 
+        let filteredData = [];
+
+        function createMangaCards(mangaList) {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, mangaList.length);
+            let cardsHtml = '';
+            for (let i = startIndex; i < endIndex; i++) {
+                const manga = mangaList[i];
+                cardsHtml += createMangaCard(manga);
+            }
+            return cardsHtml;
+        }
+
+        $("#typeFilter, #statusFilter").change(function() {
+            filterSearchAndSortManga();
+        });
+
+        $(document).on("click", ".sortable", function() {
+            const column = $(this).data("column");
+            const order = $(this).hasClass("asc") ? "desc" : "asc";
+            $(".sortable").removeClass("asc desc").find(".sort-indicator").remove();
+            $(this).addClass(order).append(`<span class="sort-indicator">${order === 'asc' ? '<i class="bi bi-sort-up"></i>' : '<i class="bi bi-sort-down"></i>'}</span>`);
+            sortManga(column, order);
+        });
+
+        function filterSearchAndSortManga() {
+            const typeFilter = $("#typeFilter").val();
+            const statusFilter = $("#statusFilter").val();
+            const searchTerm = $("#searchInput").val().trim().toLowerCase();
+
+            filteredData = originalData.slice();
+
+            if (typeFilter !== "all") {
+                filteredData = filteredData.filter(manga => manga.type === typeFilter);
+            }
+
+            if (statusFilter !== "all") {
+                filteredData = filteredData.filter(manga => manga.status === statusFilter);
+            }
+
+            if (searchTerm !== "") {
+                filteredData = filteredData.filter(manga => manga.title.toLowerCase().includes(searchTerm));
+            }
+
+            totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            console.log(filteredData);
+
+            updatePagination();
+            renderMangaCards(filteredData);
+        }
+
+        function sortManga(column, order) {
+            filteredData.sort((a, b) => {
+                if (column === 'rank' || column === 'popularity') {
+                    const valueA = parseInt(a[column]);
+                    const valueB = parseInt(b[column]);
+                    return order === 'asc' ? valueA - valueB : valueB - valueA;
+                } else {
+                    if (order === 'asc') {
+                        return a[column] > b[column] ? 1 : -1;
+                    } else {
+                        return a[column] < b[column] ? 1 : -1;
+                    }
+                }
+            });
+            renderMangaCards(filteredData);
+        }
+
+        function updatePagination() {
+            const $pagination = $(".pagination");
+            $pagination.empty();
+
+            $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="prev">Prev</a></li>`);
+
+            const visiblePages = 3;
+            let startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + visiblePages - 1);
+
+            if (endPage - startPage + 1 < visiblePages) {
+                startPage = Math.max(1, endPage - visiblePages + 1);
+            }
+
+            if (startPage > 1) {
+                $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>`);
+                if (startPage > 2) {
+                    $pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const activeClass = i === currentPage ? 'active' : '';
+                $pagination.append(`<li class="page-item ${activeClass}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    $pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+                }
+                $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">${totalPages}</a></li>`);
+            }
+
+            $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="next">Next</a></li>`);
+        }
+
+        function renderMangaCards(mangaList) {
+            const $container = $(".container-manga");
+            $container.empty();
+            const mangaCards = createMangaCards(mangaList);
+            $container.append(mangaCards);
+        }
+
+        function initializePage(data) {
+            originalData = data;
+            totalPages = Math.ceil(data.length / itemsPerPage);
+            updatePagination();
+            renderMangaCards(data);
+        }
+
+        function createMangaCard(manga) {
+            const genres = manga.genres.map(genre => `<span class="label-category">${genre}</span>`).join("");
+            const shortSynopsis = manga.synopsis.length > 48 ? manga.synopsis.substring(0, 48) + "..." : manga.synopsis;
+
+            const card = `
+                <div class="card manga-card">
+                <div class="card-header-custom text-center">
+                    <div class="card-title fw-bold">
+                    <a href="${manga.url}">${manga.title}</a>
+                    </div>
+                    <div class="card-genre small">${genres}</div>
+                </div>
+                <div class="card-body-custom">
+                    ${manga.images[0] ? 
+                    '<img class="image" src="../data/images/' + manga.images[0].path + '" alt="Card image cap">'
+                    : '<div class="image" style="background-color: lightgray"></div>'}
+                    <div class="card-text">
+                    <div class="synopsis">${shortSynopsis}</div>
+                    <button type="button" class="btn btn-link see-more" data-bs-toggle="modal" data-bs-target="#synopsisModal" data-synopsis="${manga.synopsis.replace(/"/g, '&quot;').replace(/\\/g, '\\\\')}">
+                        Lihat Selengkapnya
+                    </button>
+                    <div class="type">
+                        <span class="label">Type : </span>
+                        <span class="value">${manga.type}</span>
+                    </div>
+                    <div class="volumes">
+                        <span class="label">Volumes : </span>
+                        <span class="value">${manga.volumes}</span>
+                    </div>
+                    <div class="chapters">
+                        <span class="label">Chapters : </span>
+                        <span class="value">${manga.chapters}</span>
+                    </div>
+                    <div class="status">
+                        <span class="label">Status : </span>
+                        <span class="value">${manga.status}</span>
+                    </div>
+                    <div class="authors">
+                        <span class="label">Authors : </span>
+                        <span class="value">${manga.authors.join(", ")}</span>
+                    </div>
+                    <div class="publish">
+                        <span class="label">Published : </span>
+                        <span class="value">${manga.publish}</span>
+                    </div>
+                    <div class="themes">
+                        <span class="label">Themes : </span>
+                        <span class="value">${manga.themes.join(", ")}</span>
+                    </div>
+                    <div class="demographic">
+                        <span class="label">Demographic : </span>
+                        <span class="value">${manga.demographic.join(", ")}</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-footer-custom d-flex justify-content-between">
+                    <div class="rank">
+                    <div class="label">Rank</div>
+                    <div>${manga.rank}</div>
+                    </div>
+                    <div class="rating">
+                    <div class="label">Score</div>
+                    <div><i class="bi bi-star-fill"></i> ${manga.rating}</div>
+                    </div>
+                    <div class="popularity">
+                    <div class="label">Popularity</div>
+                    <div>${manga.popularity}</div>
+                    </div>
+                </div>
+                </div>
+            `;
+            return card;
+        }
+
+        const $container = $(".container-manga");
+
+        $.getJSON("../data/manga.json", function(data) {
+            initializePage(data);
+
+            $(document).on("click", ".pagination .page-link", function(e) {
+                e.preventDefault();
+                const targetPage = $(this).data("page");
+                if (targetPage === "prev") {
+                    currentPage = Math.max(1, currentPage - 1);
+                } else if (targetPage === "next") {
+                    currentPage = Math.min(totalPages, currentPage + 1);
+                } else {
+                    currentPage = targetPage;
+                }
+                updatePagination();
+                renderMangaCards(filteredData);
+            });
+
+            $("#searchButton").click(filterSearchAndSortManga);
+
+            $("#searchInput").keypress(function(e) {
+                if (e.which === 13) {
+                    filterSearchAndSortManga();
+                }
+            });
+            filterSearchAndSortManga();
+        });
+
+        $(document).on("click", ".see-more", function() {
+            const synopsis = $(this).data("synopsis");
+            $("#synopsisContent").text(synopsis);
+        });
+
+        function searchManga() {
+        const searchTerm = $("#searchInput").val().trim().toLowerCase();
+        const typeFilter = $("#typeFilter").val();
+
+        let filteredData = searchData.slice();
+        
+        if (typeFilter !== "all") {
+            filteredData = filteredData.filter(manga => manga.type === typeFilter);
+        }
+        
+        if (searchTerm !== "") {
+            filteredData = filteredData.filter(manga => manga.title.toLowerCase().includes(searchTerm));
+        }
+        
+        renderMangaCards(filteredData);
+    }
+    });
+    </script>
+</main><!-- End #main -->
+
+<footer id="footer" class="footer">
+
+    <div class="footer-content">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-5 col-md-12 footer-info">
+                    <a href="../index.html" class="logo d-flex align-items-center">
+                        <span>ATwoh</span>
+                    </a>
+                    <p>
+                        Kelompok mahasiswa Jurusan Teknik Komputer dan Informatika Politeknik Negeri Bandung yang mengembangkan website dalam praktikum Proyek I Pengembangan Perangkat Lunak Desktop.
+                    </p>
+                    <div class="social-links d-flex  mt-3">
+                        <a href="https://twitter.com/polbanfess" class="twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="https://www.facebook.com/polbanofficial" class="facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/politekniknegeribandung/?hl=id" class="instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="https://id.linkedin.com/school/polban/" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><i class="bi bi-dash"></i> <a href="../index.html">Home</a></li>
+                        <li><i class="bi bi-dash"></i> <a href="../index.html#job-desk">Job Desk</a></li>
+                        <li><i class="bi bi-dash"></i> <a href="about.html">Profile</a></li>
+                        <li><i class="bi bi-dash"></i> <a href="#">Project</a></li>
+                        <li><i class="bi bi-dash"></i> <a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Our Project</h4>
+                    <ul>
+                        <li><i class="bi bi-dash"></i> <a href="manga.html">Data Scraping - Manga</a></li>
+                        <li><i class="bi bi-dash"></i> <a href="skincare.html">Data Visualization - Skincare</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                    <h4>Contact Us</h4>
+                    <p>
+                        Jl. Gegerkalong Hilir, Ciwaruga, Kec. Parongpong <br>
+                        Kabupaten Bandung Barat, Jawa Barat 40559<br>
+                        Indonesia <br><br>
+                        <strong>Email:</strong> lpktpi@polban.ac.id<br>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+        <div class="me-md-auto text-center text-md-start">
+            <div class="credits">
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+    </div>
+</footer><!-- End Footer -->
+
+</body>
+</html>

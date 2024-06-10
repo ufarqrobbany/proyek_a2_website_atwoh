@@ -7,8 +7,8 @@ import json
 
 # Initialize Chrome options
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--start-minimized")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--start-minimized")
 
 # Start the Chrome driver
 driver = webdriver.Chrome(options=chrome_options)
@@ -19,11 +19,10 @@ driver.implicitly_wait(10)
 
 def createDataset():
     return {
-        "url": "",
         "title": "",
         "price": 0,
         "rating": 0.0,
-        "terjual": 0
+        "sold": 0
     }
 
 
@@ -35,11 +34,11 @@ def clean_rating(rating_str):
     return float(rating_str)
 
 
-def clean_terjual(terjual_str):
-    terjual_str = terjual_str.replace('terjual', '').replace('+', '').strip()
-    if 'rb' in terjual_str:
-        return int(float(terjual_str.replace('rb', '')) * 1000)
-    return int(terjual_str)
+def clean_sold(sold_str):
+    sold_str = sold_str.replace('sold', '').replace('+', '').strip()
+    if 'rb' in sold_str:
+        return int(float(sold_str.replace('rb', '')) * 1000)
+    return int(sold_str)
 
 
 def scroll_to_bottom():
@@ -60,7 +59,6 @@ def scrape_page():
         time.sleep(3)
         scroll_to_bottom()
 
-    # all_selected = driver.find_element(By.XPATH, '//*[@id="zeus-root"]/div/div[2]/div/div[2]/div[4]')
     all_selected = driver.find_element(By.XPATH, '//*[@data-testid="divSRPContentProducts"]')
     lines = all_selected.find_elements(By.CLASS_NAME, "css-jza1fo")
     if len(lines) == 0:
@@ -81,7 +79,6 @@ def scrape_page():
                     print("No product found")
                     continue
 
-                # url = product_link.get_attribute('href')
                 title = product_link.find_element(By.CLASS_NAME, "css-3um8ox").text
                 price_str = product_link.find_element(By.CLASS_NAME, "css-h66vau").text
 
@@ -92,21 +89,20 @@ def scrape_page():
                     rating = None
 
                 try:
-                    terjual_str = product_link.find_element(By.CLASS_NAME, "css-1sgek4h").text
-                    terjual = clean_terjual(terjual_str)
+                    sold_str = product_link.find_element(By.CLASS_NAME, "css-1sgek4h").text
+                    sold = clean_sold(sold_str)
                 except:
-                    terjual = None
+                    sold = None
 
                 price = clean_price(price_str)
 
                 print(f"     {len(arr_of_dict) + 1} - {title}")
 
                 dataset = createDataset()
-                # dataset['url'] = url
                 dataset['title'] = title
                 dataset['price'] = price
                 dataset['rating'] = rating
-                dataset['terjual'] = terjual
+                dataset['sold'] = sold
                 arr_of_dict.append(dataset)
 
             except Exception as e:
