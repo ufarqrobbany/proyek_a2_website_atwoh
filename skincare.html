@@ -126,6 +126,26 @@
         <canvas id="brighteningChart"></canvas>
       </div>
     </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Perbandingan Harga dan Jumlah terjual - Kategori Acne</h2>
+        <canvas id="myChart4"></canvas>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Perbandingan Harga dan Jumlah terjual - Kategori Anti-Aging
+        </h2>
+        <canvas id="myChart5"></canvas>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; margin: 3em 0;">
+      <div style="width: 800px">
+        <h2 style="display: flex; justify-content:center">Perbandingan Harga dan Jumlah terjual - Kategori Brightening
+        </h2>
+        <canvas id="myChart6"></canvas>
+      </div>
+    </div>
 
 
     <!-- End Analisis Tren Skincare Section -->
@@ -560,6 +580,110 @@
         });
       })
       .catch(error => console.error('Error fetching data:', error));
+  </script>
+  <script>
+    // Function to fetch JSON data
+    async function fetchData() {
+      const response = await fetch('scrape_skincare_tokopedia/tokopedia_data_with_brand.json');
+      const data = await response.json();
+      return data;
+    }
+
+    // Function to process data and generate chart
+    function processData(data, kategori) {
+      const categoryData = data.find(category => category.label === kategori).items;
+      const priceBins = Array.from({ length: 50 }, (_, i) => ({ price: i * 10000, sold: 0, count: 0 }));
+
+      categoryData.forEach(item => {
+        const binIndex = Math.floor(item.price / 10000);
+        if (binIndex < priceBins.length) {
+          priceBins[binIndex].sold += item.terjual || 0;
+          priceBins[binIndex].count += 1;
+        }
+      });
+
+      const filteredBins = priceBins.filter(bin => bin.count > 0);
+      const prices = filteredBins.map(bin => bin.price);
+      const averageSold = filteredBins.map(bin => bin.sold / bin.count);
+
+      return { prices, averageSold };
+    }
+
+    // Function to create chart
+    // Function to create chart
+    function createChart(ctx, labels, data, title) {
+      const categoryColors = {
+        'Acne': 'rgba(75, 192, 192, 1)',
+        'Anti Aging': 'rgba(255, 159, 64, 1)',
+        'Brightening': 'rgba(153, 102, 255, 1)'
+      };
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Average Sold',
+            data: data,
+            borderColor: categoryColors[title],
+            borderWidth: 2,
+            fill: false,
+            pointBackgroundColor: categoryColors[title],
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: categoryColors[title]
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom',
+              title: {
+                display: true,
+                text: 'Prices'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Average Sold'
+              }
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: title
+            }
+          }
+        }
+      });
+    }
+
+
+    // Main function to generate charts
+    async function generateCharts() {
+      const data = await fetchData();
+
+      const acneData = processData(data, 'Acne');
+      const antiAgingData = processData(data, 'Anti Aging');
+      const brighteningData = processData(data, 'Brightening');
+
+      const acneCtx = document.getElementById('myChart4').getContext('2d');
+      createChart(acneCtx, acneData.prices, acneData.averageSold, 'Acne');
+
+      const antiAgingCtx = document.getElementById('myChart5').getContext('2d');
+      createChart(antiAgingCtx, antiAgingData.prices, antiAgingData.averageSold, 'Anti Aging');
+
+      const brighteningCtx = document.getElementById('myChart6').getContext('2d');
+      createChart(brighteningCtx, brighteningData.prices, brighteningData.averageSold, 'Brightening');
+    }
+
+    // Call the main function to generate charts
+    generateCharts();
+
   </script>
 
 </body>
