@@ -35,7 +35,7 @@ def clean_rating(rating_str):
 
 
 def clean_sold(sold_str):
-    sold_str = sold_str.replace('sold', '').replace('+', '').strip()
+    sold_str = sold_str.replace('terjual', '').replace('+', '').strip()
     if 'rb' in sold_str:
         return int(float(sold_str.replace('rb', '')) * 1000)
     return int(sold_str)
